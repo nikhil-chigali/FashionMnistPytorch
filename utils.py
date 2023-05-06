@@ -1,6 +1,8 @@
 import torch
 import torchmetrics
 
+from config import Config
+
 def train_epoch(model, dataloader, loss_fn, optimizer):
     """Trains the model for 1 epoch across all the dataset batches
 
