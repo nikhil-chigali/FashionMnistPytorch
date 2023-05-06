@@ -17,11 +17,11 @@ def train_epoch(model, dataloader, loss_fn, optimizer):
     """
     dataset_size = len(dataloader)
     epoch_loss = 0
-    for batch_num, batch in dataloader:
+    for batch_num, batch in enumerate(dataloader):
         X, y = batch
         # forward prop
         y_hat = model(X)
-        loss = loss_fn(y, y_hat)
+        loss = loss_fn(y_hat, y)
         epoch_loss += loss.item()
 
         # backward prop
@@ -46,12 +46,12 @@ def test_epoch(model, dataloader, loss_fn):
     dataset_size = len(dataloader)
     epoch_loss = 0
     acc_metric = torchmetrics.Accuracy(task = 'multiclass', num_classes=Config.num_classes)
-    for batch_num, batch in dataloader:
+    for batch_num, batch in enumerate(dataloader):
         X, y = batch
         # forward prop
         with torch.no_grad():
             y_hat = model(X)
-            loss = loss_fn(y, y_hat)
+            loss = loss_fn(y_hat, y)
             epoch_loss += loss.item()
             batch_acc = acc_metric(y_hat, y)
 
