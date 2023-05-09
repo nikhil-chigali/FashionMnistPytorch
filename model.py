@@ -2,7 +2,7 @@ import torch
 import torch.nn as nn
 from config import Config
 
-class MyModel(nn.Module):
+class FeedForwardNeuralNet(nn.Module):
     """
         A Linear Feed Forward Neural Network model that computes logits
     """

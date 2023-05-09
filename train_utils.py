@@ -45,6 +45,7 @@ def test_epoch(model, dataloader, loss_fn):
     """
     dataset_size = len(dataloader)
     epoch_loss = 0
+    model.eval()
     acc_metric = torchmetrics.Accuracy(task = 'multiclass', num_classes=Config.num_classes)
     for batch_num, batch in enumerate(dataloader):
         X, y = batch
