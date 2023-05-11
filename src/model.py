@@ -1,22 +1,21 @@
 import torch
 import torch.nn as nn
-from config import Config
 
 class FeedForwardNeuralNet(nn.Module):
     """
         A Linear Feed Forward Neural Network model that computes logits
     """
-    def __init__(self):
+    def __init__(self, input_size, output_size):
         super().__init__()
         self.flatten = nn.Flatten()
         self.linear_stack = nn.Sequential(
-            nn.Linear(Config.img_size[0]*Config.img_size[1], 512),
+            nn.Linear(input_size[0] * input_size[1], 512),
             nn.ReLU(),
             nn.Linear(512, 512),
             nn.ReLU(),
             nn.Linear(512, 256),
             nn.ReLU(),
-            nn.Linear(256, Config.num_classes),
+            nn.Linear(256, output_size),
             nn.ReLU()
         )
     

@@ -2,7 +2,6 @@ import random
 import torchvision.transforms as transforms
 import torchvision.datasets as datasets
 from torch.utils.data import Subset, DataLoader
-from config import Config
 
 data_transforms = transforms.Compose([
     transforms.ToTensor(),
@@ -39,19 +38,17 @@ def get_loader(is_train, batch_size):
         train_dataset = Subset(dataset, train_indices)
         val_dataset = Subset(dataset, val_indices)
         train_loader = DataLoader(train_dataset, 
-                        batch_size=Config.batch_size,
+                        batch_size=batch_size,
                         num_workers=4,
                         shuffle=is_train)
         val_loader = DataLoader(val_dataset, 
-                        batch_size=Config.batch_size,
+                        batch_size=batch_size,
                         num_workers=4,
                         shuffle=is_train)
         loader = (train_loader, val_loader)
     else:
         loader = DataLoader(dataset, 
-                        batch_size=Config.batch_size,
+                        batch_size=batch_size,
                         num_workers=4,
                         shuffle=is_train)
     return loader
-
-get_loader(True, data_transforms)
