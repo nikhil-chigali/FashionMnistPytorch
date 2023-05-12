@@ -1,14 +1,29 @@
+import torch
 import torch.nn as nn
+from numpy.random import MT19937
+from numpy.random import RandomState, SeedSequence
 import torch.optim as optim
 from model import FeedForwardNeuralNet
 from data import get_loader
 from train_utils import train_model, test_model
 from tqdm import tqdm
 import wandb
+import random
 
 # TODO WandB Artifacts to save trained models
 # TODO WandB Sweeps to perform Hyperparameter sweeps
 # TODO Use cross-folds [Refer to Abhishek Thakur's videos]
+
+
+def seeds():
+    """
+    Seeds random generators of random, numpy, and torch
+    """
+    SEED = 42
+    random.seed(SEED)
+    torch.manual_seed(SEED)
+    rs = RandomState(MT19937(SeedSequence(SEED)))
+
 
 def initialize():
     global config, dataloaders, loss_fn
@@ -24,6 +39,7 @@ def initialize():
             "lr": 0.01,
             "num_classes": 10,
             "img_size": (28, 28),
+            "device": "cpu",
             "dataset": "FashionMNIST",
             "model": "FeedForwardNeuralNetwork",
         },
