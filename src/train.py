@@ -2,10 +2,13 @@ import torch.nn as nn
 import torch.optim as optim
 from model import FeedForwardNeuralNet
 from data import get_loader
-from train_utils import train_model, test_model, validate_model
+from train_utils import train_model, test_model
 from tqdm import tqdm
 import wandb
 
+# TODO WandB Artifacts to save trained models
+# TODO WandB Sweeps to perform Hyperparameter sweeps
+# TODO Use cross-folds [Refer to Abhishek Thakur's videos]
 
 def initialize():
     global config, dataloaders, loss_fn
@@ -14,6 +17,7 @@ def initialize():
     # Initializing WandB project
     wandb.init(
         project="fashionmnist-pytorch",
+        name="final-test",
         config={
             "epochs": 20,
             "batch_size": 32,

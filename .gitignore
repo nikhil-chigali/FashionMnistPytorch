@@ -54,6 +54,9 @@ cover/
 # Data
 data/
 
+# Training logs
+wandb/
+
 # Translations
 *.mo
 *.pot

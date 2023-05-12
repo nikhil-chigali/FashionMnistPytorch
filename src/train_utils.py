@@ -31,14 +31,24 @@ def train_model(model, dataloader, loss_fn, optimizer):
         optimizer.step()
     return epoch_loss
 
-def log_img_table(imgs, preds, labels, probs):
+
+def log_img_table(imgs, preds, labels, probs) -> None:
+    """Logs a batch of 32 images along with their predictions and probs into wandb
+
+    Args:
+        imgs (torch.Tensor): Batch of Images
+        preds (torch.Tensor): Prediction labels
+        labels (torch.Tensor): Target labels
+        probs (torch.Tensor): Probability values
+    """
     num_classes = probs.size()[-1]
-    table = wandb.Table(columns=["image", "pred", "target"]+[f"score_{i}" for i in range(num_classes)])
+    table = wandb.Table(
+        columns=["image", "pred", "target"] + [f"score_{i}" for i in range(num_classes)]
+    )
     for img, pred, targ, prob in zip(imgs, preds, labels, probs):
-        table.add_data(wandb.Image(img[0].numpy()*255), pred, targ, *probs.numpy())
-    wandb.log({
-        "predictions_table": table
-    }, commit=False)
+        table.add_data(wandb.Image(img[0].numpy() * 255), pred, targ, *prob.numpy())
+    wandb.log({"predictions_table": table}, commit=False)
+
 
 def test_model(model, dataloader, loss_fn, num_classes, log_imgs=False):
     """Computes loss and accuracy of the model on the dataset. It also logs one prediction batch to wandb table if `log_imgs` is set to TRUE
@@ -70,28 +80,7 @@ def test_model(model, dataloader, loss_fn, num_classes, log_imgs=False):
                 batch_acc = acc_metric(y_hat, y)
                 if log_imgs and batch_num == 0:
                     _, preds = torch.max(y_hat.data, 1)
-                    log_img_table(
-                        X,
-                        preds,
-                        y,
-                        y_hat.softmax(dim=1)
-                    )
+                    log_img_table(X, preds, y, y_hat.softmax(dim=1))
 
     epoch_acc = acc_metric.compute()
     return epoch_loss, torch.mean(epoch_acc)
-
-
-
-# from model import FeedForwardNeuralNet
-# from data import get_loader
-
-# def test_test_epoch_function() -> None:
-#     loader = get_loader(True, 32)
-#     model = FeedForwardNeuralNet((28,28),10)
-#     loss_fn = nn.CrossEntropyLoss()
-
-#     print(test_model(model=model,
-#                       dataloader=loader[1],
-#                       loss_fn=loss_fn,
-#                       num_classes=10, log_imgs=True))
-# test_test_epoch_function()
